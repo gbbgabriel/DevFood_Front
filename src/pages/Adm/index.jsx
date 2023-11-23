@@ -231,11 +231,13 @@ export const Adm = () => {
           <thead>
             <tr>
               <th>Nome</th>
+              <th>Ações</th>
             </tr>
           </thead>
           <tbody>
             {categories.map((category, index) => (
               <tr key={index}>
+                <td>{category.name}</td>
                 <td>
                   <Button className="bg-yellow-400 text-white" text="Editar" size="sm" onBtnClick={() => handleOpenUpdateModal(category.id, "category")} />
                   <Button className="bg-red-600 text-white" text="Remover" size="sm" onBtnClick={() => handleDelete(category.id, "category")} />
@@ -254,11 +256,15 @@ export const Adm = () => {
               <th>Nome</th>
               <th>Preço</th>
               <th>Categoria</th>
+              <th>Ações</th>
             </tr>
           </thead>
           <tbody>
             {products.map((product, index) => (
               <tr key={index}>
+                <td>{product.name}</td>
+                <td>{product.price}</td>
+                <td>{product.category}</td>
                 <td>
                   <Button className="bg-yellow-400 text-white" text="Editar" size="sm" onBtnClick={() => handleOpenUpdateModal(product.id, "product")} />
                   <Button className="bg-red-600 text-white" text="Remover" size="sm" onBtnClick={() => handleDelete(product.id, "product")} />
