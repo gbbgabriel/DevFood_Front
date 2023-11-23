@@ -1,18 +1,14 @@
 export const BUTTONS_DEF_FOODS = [
   {
-    text: "Destaques",
-    value: "destaques"
-  },
-  {
     text: "Sanduíches",
-    value: "sanduiches"
+    value: "sandwiches"
   },
   {
-    text: "Acompanhamento",
-    value: "acompanhamento"
+    text: "Acompanhamentos",
+    value: "desserts"
   },
   {
-    text: "Sobremesas",
-    value: "sobremesas"
+    text: "Bebidas",
+    value: "beverages"
   }
 ]

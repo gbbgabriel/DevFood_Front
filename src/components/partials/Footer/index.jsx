@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import hamburgerIcon from '../../../assets/images/icon_hamburguer_transparent.png';
 
 export const Footer = () => {
@@ -23,16 +22,16 @@ export const Footer = () => {
           <h3 className="text-2xl mb-4">Mapa do Site</h3>
           <ul className="flex flex-col gap-y-4">
             <li>
-              <Link to="/">Cardápio</Link>
+              <a href="#menu">Cardápio</a>
             </li>
             <li>
-              <Link to="/">Onde tem Devs</Link>
+              <a href="">Onde tem Devs</a>
             </li>
             <li>
-              <Link to="/">Novidades</Link>
+              <a href="#news">Novidades</a>
             </li>
             <li>
-              <Link to="/">Sobre nós</Link>
+              <a href="">Sobre nós</a>
             </li>
           </ul>
         </div>        

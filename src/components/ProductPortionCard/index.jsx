@@ -1,17 +1,15 @@
 import PropTypes from "prop-types";
 
-export const ProductPortionCard = ({ title, quantity, percentage }) => {
+export const ProductPortionCard = ({ title, desc }) => {
   return (
     <div className="flex flex-col justify-center items-center gap-x-2 w-[350px] p-4 shadow-md">
-      <span className="font-bold text-lg">{title}</span>
-      <h3 className="font-bold text-xl">{quantity}</h3>
-      <span className="font-bold">{percentage}</span>
+      <span className="font-bold text-xl">{title}:</span>
+      <h3 className="font-semibold text-lg">{desc}</h3>      
     </div>
   );
 }
 
 ProductPortionCard.propTypes = {
   title: PropTypes.string.isRequired,
-  quantity: PropTypes.string.isRequired,
-  percentage: PropTypes.string.isRequired,
+  desc: PropTypes.string.isRequired,
 }

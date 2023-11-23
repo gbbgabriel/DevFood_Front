@@ -6,6 +6,7 @@ import { Register } from "./pages/Register";
 import { Orientations } from "./pages/Orientations";
 import { SnackOrientation } from "./pages/SnackOrientation";
 import { EntryPayment } from "./pages/EntryPayment";
+import { Adm } from "./pages/Adm";
 
 export const AppRoutes = () => {
   return (
@@ -14,9 +15,10 @@ export const AppRoutes = () => {
       <Route path="/highlights" Component={Highlights} />
       <Route path="/login" Component={Login} />
       <Route path="/register" Component={Register} />
-      <Route path="/orientations" Component={Orientations} />
+      <Route path="/orientations/:id" Component={Orientations} />
       <Route path="/snack-orientations" Component={SnackOrientation} />
       <Route path="/entry-payment" Component={EntryPayment} />
+      <Route path="/adm" Component={Adm} />
     </Routes>
   );
 }
