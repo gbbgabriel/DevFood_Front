@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { addCart } from "../../services/addCart";
 import { ToastContainer, toast } from "react-toastify";
 
+
 const BUTTONS_DEF_FOODS = [
   { text: "Todos", value: "all", categoryId: null },
   { text: "Lanches", value: "sandwiches", categoryId: 1 },
@@ -17,12 +18,12 @@ const BUTTONS_DEF_FOODS = [
   { text: "Sobremesas", value: "desserts", categoryId: 2 },
 ];
 
-const HighlightsComponent = () => {
+const LanchesComponent = () => {
   const [sandwiches, setSandwiches] = useState([]);
   const [beverages, setBeverages] = useState([]);
   const [desserts, setDesserts] = useState([]);
   const [products, setProducts] = useState([]);
-  const [categoryActive, setCategoryActive] = useState('all');
+  const [categoryActive, setCategoryActive] = useState('sandwiches');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -124,4 +125,4 @@ const HighlightsComponent = () => {
   );
 }
 
-export const Highlights = withSurfaces(HighlightsComponent);
+export const Lanches = withSurfaces(LanchesComponent);

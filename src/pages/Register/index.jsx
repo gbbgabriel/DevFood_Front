@@ -19,14 +19,14 @@ export const Register = () => {
     try {
       const name = useRefName.current.value;
       const email = useRefEmail.current.value;
-      const number = useRefNumber.current.value;
+      const phone = useRefNumber.current.value;
       const cpf = useRefCPF.current.value;
       const password = useRefPassword.current.value;
   
       const user = {
         name,
         email,
-        number,
+        phone,
         cpf,
         password
       }

@@ -1,65 +1,107 @@
-import { Input } from "../../components/Input";
-import bgHamburguer from "../../assets/images/bg_hamburguer.png";
-import { Button } from "../../components/Button";
+import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { login } from "../../services/login";
-import { useRef } from "react";
 import { toast } from "react-toastify";
 
 export const Login = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const useRefEmail = useRef(null);
   const useRefPassword = useRef(null);
 
+  useEffect(() => {
+    const isUserLoggedIn = () => {
+      // Implemente a lógica para verificar se o usuário está logado usando o token salvo no localStorage
+      return localStorage.getItem("@token") !== null;
+    };
+
+    if (isUserLoggedIn()) {
+      navigate("/");
+    }
+  }, [navigate]);
+
   const handleLogin = async () => {
     try {
+      setLoading(true);
+
       const email = useRefEmail.current.value;
-      const password = useRefPassword.current.value;      
-  
+      const password = useRefPassword.current.value;
+
       const loginData = {
         email,
-        password,    
-      }
-  
-      const response = await login(loginData);
+        password,
+      };
 
-      localStorage.setItem("@token", response.data.token);
+      const response = await fetch("http://localhost:8080/auth", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(loginData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao fazer login");
+      }
+
+      const responseData = await response.json();
+
+      localStorage.setItem("@token", responseData.accessToken);
+
+      toast.success("Login realizado com sucesso");
       navigate("/");
     } catch (err) {
       toast.error("Erro ao fazer login");
+    } finally {
+      setLoading(false);
     }
-  }
-  
+  };
+
   return (
     <div className="w-screen h-screen flex">
-      <div className="container mx-auto flex flex-col items-center py-8">      
-        <h1 className="font-bold text-4xl mb-2">Acesse sua conta</h1>        
+      <div className="container mx-auto flex flex-col items-center py-8">
+        <h1 className="font-bold text-4xl mb-2">Acesse sua conta</h1>
         <div className="mt-20 w-1/2">
           <form className="py-4 px-2 w-full">
-            <Input ref={useRefEmail} classNameWrapper="mb-8" type="email" placeholder="E-mail" />            
-            <Input ref={useRefPassword} type="password" placeholder="Senha" afterIcon="Eye" />
-            {/* <input ref={useRefConnected} className="mt-8 mr-2" id="connected" type="checkbox" name="connected" /> */}
-            {/* <label htmlFor="connected">Matenha-me conectado</label> */}
+            <input
+              ref={useRefEmail}
+              className="w-full p-2 mb-4 border rounded"
+              type="email"
+              placeholder="E-mail"
+            />
+            <input
+              ref={useRefPassword}
+              className="w-full p-2 mb-4 border rounded"
+              type="password"
+              placeholder="Senha"
+            />
           </form>
         </div>
         <div className="mt-12 flex flex-col items-center">
-          <Button
-            onBtnClick={handleLogin} 
-            className="mt-8 py-2 mb-4" 
-            text="Entrar" 
-            type="primary" 
-            size="md" 
-          />
-          <div>Esqueceu a senha? <Link className="text-blue-600 underline" to="/recovery-password">Recupere-a</Link></div>
+          <button
+            onClick={handleLogin}
+            disabled={loading}
+            className="w-full py-2 mb-4 bg-blue-500 text-white rounded cursor-pointer"
+          >
+            {loading ? "Carregando..." : "Entrar"}
+          </button>
+          <div>
+            Esqueceu a senha?{" "}
+            <Link className="text-blue-600 underline" to="/recovery-password">
+              Recupere-a
+            </Link>
+          </div>
         </div>
         <div className="text-lg mt-28">
           <p className="text-center mb-4 text-xl">Se ainda não comeu na DevsFood</p>
           <div className="text-center">
-            <Link className="text-blue-600 underline" to="/register">cadastre-se</Link>
+            <Link className="text-blue-600 underline" to="/register">
+              Cadastre-se
+            </Link>
           </div>
         </div>
       </div>
-      <img className="w-[600px] object-cover" src={bgHamburguer} alt="Background hamburguer" />
+      {/* Remova a importação de bgHamburguer se não estiver sendo utilizada */}
+      {/* <img className="w-[600px] object-cover" src={bgHamburguer} alt="Background hamburguer" /> */}
     </div>
   );
-}
+};
