@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+
 import hamburguer from "../../../assets/images/icon_hamburguer.png";
 import cartImg from "../../../assets/images/icon_cart.png";
 import { Button } from "../../Button";
@@ -8,17 +10,32 @@ import { CartModal } from "../../CartModal";
 export const Header = () => {
   const [modalCartOpen, setModalCartOpen] = useState(false);
   const [cart, setCart] = useState([]);
+  const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
 
-  // Função para verificar se o usuário está logado
+  useEffect(() => {
+    const decodeToken = () => {
+      const token = localStorage.getItem("@token");
+
+      if (token) {
+        try {
+          const decodedToken = jwtDecode(token);
+          setIsAdmin(decodedToken.typeUser === 2);
+        } catch (error) {
+          console.error("Erro ao decodificar o token:", error);
+        }
+      }
+    };
+
+    decodeToken();
+  }, []);
+
   const isUserLoggedIn = () => {
     return localStorage.getItem("@token") !== null;
   };
 
-  // Função para realizar o logout (remover token do localStorage)
   const handleLogout = () => {
     localStorage.removeItem("@token");
-    // Redireciona o usuário para a página de login após o logout
     navigate("/login");
   };
 
@@ -29,10 +46,17 @@ export const Header = () => {
     setModalCartOpen(!modalCartOpen);
   };
 
+  const handleEditProducts = () => {
+    // Adicione aqui a lógica para navegar para a página de edição de produtos
+    // Por exemplo: navigate("/admin/edit-products");
+  };
+
   return (
     <header className="container mx-auto">
       <div className="flex items-center justify-between">
-        <a href="http://localhost:5173/"><img src={hamburguer} alt="Hamburguer logo" /></a>
+        <a href="http://localhost:5173/">
+          <img src={hamburguer} alt="Hamburguer logo" />
+        </a>
         <div>
           <ul className="flex items-center gap-x-12">
             <li>
@@ -50,7 +74,6 @@ export const Header = () => {
           </ul>
         </div>
         <div>
-          {/* Mostra os botões de login e cadastro apenas se o usuário não estiver logado */}
           {!isUserLoggedIn() && (
             <>
               <Button
@@ -66,13 +89,20 @@ export const Header = () => {
               />
             </>
           )}
-          {/* Mostra o botão de logout apenas se o usuário estiver logado */}
-          {isUserLoggedIn() && (
+          {isUserLoggedIn() && !isAdmin && (
             <button
               onClick={handleLogout}
               className="bg-red-500 text-white px-4 py-2 rounded"
             >
               Logout
+            </button>
+          )}
+          {isAdmin && (
+            <button
+              onClick={handleEditProducts}
+              className="bg-blue-500 text-white px-4 py-2 rounded ml-2"
+            >
+              Produtos
             </button>
           )}
         </div>
