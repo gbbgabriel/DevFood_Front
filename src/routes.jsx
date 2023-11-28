@@ -11,6 +11,7 @@ import { Lanches } from "./pages/Cardapio/lanche";
 import { Acompanhamentos } from "./pages/Cardapio/acompanhamentos";
 import { Bebida } from "./pages/Cardapio/bebida";
 import { Cardapio } from "./pages/Cardapio";
+import CreateProductForm from "./pages/CreateProduct/createProduct";
 
 
 export const AppRoutes = () => {
@@ -24,10 +25,12 @@ export const AppRoutes = () => {
       <Route path="/snack-orientations" Component={SnackOrientation} />
       <Route path="/entry-payment" Component={EntryPayment} />
       <Route path="/adm" Component={Adm} />
+      <Route path="/products" Component={CreateProductForm} />
       <Route path="/cardapio" Component={Cardapio} />
       <Route path="/lanches" Component={Lanches} />
       <Route path="/acompanhamentos" Component={Acompanhamentos} />
       <Route path="/bebida" Component={Bebida} />
+      <Route path="/:slug/:id" Component={() => <h1>Page not found</h1>} />
       <Route path="*" Component={() => <h1>Page not found</h1>} />
     </Routes>
   );

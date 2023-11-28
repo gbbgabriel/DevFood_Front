@@ -10,7 +10,6 @@ import { useNavigate } from "react-router-dom";
 import { addCart } from "../../services/addCart";
 import { ToastContainer, toast } from "react-toastify";
 
-
 const BUTTONS_DEF_FOODS = [
   { text: "Todos", value: "all", categoryId: null },
   { text: "Lanches", value: "sandwiches", categoryId: 1 },
@@ -27,7 +26,7 @@ const LanchesComponent = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    (async () => {
+    const fetchData = async () => {
       try {
         const response = await getProducts();
         const products = response;
@@ -43,7 +42,9 @@ const LanchesComponent = () => {
       } catch (error) {
         console.error('Error fetching products:', error);
       }
-    })();
+    };
+
+    fetchData();
   }, []);
 
   const handleAddToCartClick = async (id) => {
@@ -52,6 +53,29 @@ const LanchesComponent = () => {
       toast.success('Produto adicionado ao carrinho!');
     } catch (err) {
       toast.error('Erro ao adicionar produto ao carrinho!');
+    }
+  };
+
+  const handleDeleteClick = async (id) => {
+    try {
+      const token = localStorage.getItem("@token");
+      const response = await fetch(`http://localhost:8080/product/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `${token}`,
+        },
+      });
+
+      if (response.ok) {
+        setProducts((prevProducts) => prevProducts.filter((product) => product.id !== id));
+        toast.success('Produto excluído com sucesso!');
+      } else {
+        toast.error('Erro ao excluir o produto. Verifique as permissões.');
+      }
+    } catch (error) {
+      console.error('Erro ao processar a exclusão:', error);
+      toast.error('Erro ao excluir o produto.');
     }
   };
 
@@ -86,6 +110,7 @@ const LanchesComponent = () => {
                 price={product.price}
                 onCardClick={() => { navigate(`/orientations/${product.id}`, { state: { imgUrl: "/src/assets/images/hamburguer.png" } }) }}
                 onAddCardToCartClick={() => handleAddToCartClick(product.id)}
+                onDeleteClick={() => handleDeleteClick(product.id)}
               />
             ))}
             {categoryActive === 'beverages' && beverages.map((product, index) => (
@@ -96,6 +121,7 @@ const LanchesComponent = () => {
                 price={product.price}
                 onCardClick={() => { navigate(`/orientations/${product.id}`, { state: { imgUrl: "/src/assets/images/hamburguer.png" } }) }}
                 onAddCardToCartClick={() => handleAddToCartClick(product.id)}
+                onDeleteClick={() => handleDeleteClick(product.id)}
               />
             ))}
             {categoryActive === 'desserts' && desserts.map((product, index) => (
@@ -104,25 +130,28 @@ const LanchesComponent = () => {
                 image={product.image}                             
                 price={product.price}
                 title={product.name}
-                onCardClick={() => { navigate(`/orientations/${product.id}`, { state: { imgUrl: "/src/assets/images/hamburguer.png" } }) }}
-                onAddCardToCartClick={() => handleAddToCartClick(product.id)}
-              />
-            ))}
-            {categoryActive === 'all' && products.map((product, index) => (
-              <CardFood 
-                key={index}        
-                image={product.image}          
-                title={product.name}                  
-                price={product.price}
-                onCardClick={() => { navigate(`/orientations/${product.id}`, { state: { imgUrl: "/src/assets/images/hamburguer.png" } }) }}
-                onAddCardToCartClick={() => handleAddToCartClick(product.id)}
-              />
-            ))}
+                onCardClick={() => {
+                  navigate(`/orientations/${product.id}`, { state: { imgUrl: "/src/assets/images/hamburguer.png" } }) }}
+                  onAddCardToCartClick={() => handleAddToCartClick(product.id)}
+                  onDeleteClick={() => handleDeleteClick(product.id)}
+                />
+              ))}
+              {categoryActive === 'all' && products.map((product, index) => (
+                <CardFood 
+                  key={index}        
+                  image={product.image}          
+                  title={product.name}                  
+                  price={product.price}
+                  onCardClick={() => { navigate(`/orientations/${product.id}`, { state: { imgUrl: "/src/assets/images/hamburguer.png" } }) }}
+                  onAddCardToCartClick={() => handleAddToCartClick(product.id)}
+                  onDeleteClick={() => handleDeleteClick(product.id)}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
-    </>
-  );
+        </section>
+      </>
+    );
 }
 
 export const Lanches = withSurfaces(LanchesComponent);

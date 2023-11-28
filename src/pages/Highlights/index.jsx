@@ -54,6 +54,29 @@ const HighlightsComponent = () => {
     }
   };
 
+  const handleDeleteClick = async (id) => {
+    try {
+      const token = localStorage.getItem("@token");
+      const response = await fetch(`http://localhost:8080/product/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `${token}`,
+        },
+      });
+
+      if (response.ok) {
+        setProducts((prevProducts) => prevProducts.filter((product) => product.id !== id));
+        toast.success('Produto excluído com sucesso!');
+      } else {
+        toast.error('Erro ao excluir o produto. Verifique as permissões.');
+      }
+    } catch (error) {
+      console.error('Erro ao processar a exclusão:', error);
+      toast.error('Erro ao excluir o produto.');
+    }
+  };
+
   return (
     <>
       <ToastContainer />
@@ -85,6 +108,7 @@ const HighlightsComponent = () => {
                 price={product.price}
                 onCardClick={() => { navigate(`/orientations/${product.id}`, { state: { imgUrl: "/src/assets/images/hamburguer.png" } }) }}
                 onAddCardToCartClick={() => handleAddToCartClick(product.id)}
+                onDeleteClick={() => handleDeleteClick(product.id)}
               />
             ))}
             {categoryActive === 'beverages' && beverages.map((product, index) => (
@@ -95,6 +119,7 @@ const HighlightsComponent = () => {
                 price={product.price}
                 onCardClick={() => { navigate(`/orientations/${product.id}`, { state: { imgUrl: "/src/assets/images/hamburguer.png" } }) }}
                 onAddCardToCartClick={() => handleAddToCartClick(product.id)}
+                onDeleteClick={() => handleDeleteClick(product.id)}
               />
             ))}
             {categoryActive === 'desserts' && desserts.map((product, index) => (
@@ -103,25 +128,28 @@ const HighlightsComponent = () => {
                 image={product.image}                             
                 price={product.price}
                 title={product.name}
-                onCardClick={() => { navigate(`/orientations/${product.id}`, { state: { imgUrl: "/src/assets/images/hamburguer.png" } }) }}
-                onAddCardToCartClick={() => handleAddToCartClick(product.id)}
-              />
-            ))}
-            {categoryActive === 'all' && products.map((product, index) => (
-              <CardFood 
-                key={index}        
-                image={product.image}          
-                title={product.name}                  
-                price={product.price}
-                onCardClick={() => { navigate(`/orientations/${product.id}`, { state: { imgUrl: "/src/assets/images/hamburguer.png" } }) }}
-                onAddCardToCartClick={() => handleAddToCartClick(product.id)}
-              />
-            ))}
+                onCardClick={() => {
+                  navigate(`/orientations/${product.id}`, { state: { imgUrl: "/src/assets/images/hamburguer.png" } }) }}
+                  onAddCardToCartClick={() => handleAddToCartClick(product.id)}
+                  onDeleteClick={() => handleDeleteClick(product.id)}
+                />
+              ))}
+              {categoryActive === 'all' && products.map((product, index) => (
+                <CardFood 
+                  key={index}        
+                  image={product.image}          
+                  title={product.name}                  
+                  price={product.price}
+                  onCardClick={() => { navigate(`/orientations/${product.id}`, { state: { imgUrl: "/src/assets/images/hamburguer.png" } }) }}
+                  onAddCardToCartClick={() => handleAddToCartClick(product.id)}
+                  onDeleteClick={() => handleDeleteClick(product.id)}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
-    </>
-  );
-}
-
-export const Highlights = withSurfaces(HighlightsComponent);
+        </section>
+      </>
+    );
+  }
+  
+  export const Highlights = withSurfaces(HighlightsComponent);

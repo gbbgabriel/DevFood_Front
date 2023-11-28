@@ -1,6 +1,5 @@
 import 'react-toastify/dist/ReactToastify.css';
 import { useParams } from "react-router-dom";
-import bgHamburguerDesenho from "../../assets/images/bg_hamburguer_desenho.png";
 import { Button } from "../../components/Button";
 import { ProductPortionCard } from "../../components/ProductPortionCard";
 import { withSurfaces } from "../../hoc/withSurfaces";
@@ -11,7 +10,13 @@ import { ToastContainer, toast } from "react-toastify";
 
 export const OrientationsComponent = () => {
   const { id } = useParams();
-  const [product, setProduct] = useState(null);
+  const [product, setProduct] = useState({
+    name: '',
+    price: '',
+    category: { name: '' },
+    description: '',
+    image: ''
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,27 +43,31 @@ export const OrientationsComponent = () => {
   return (
     <>
       <ToastContainer />
-      <div className="w-full justify-center">
-        <img className="h-[350px]" width="100%" src={bgHamburguerDesenho} alt="Banner hamburguer" />
-      </div>
 
       <section className="container mx-auto mt-20 flex items-center flex-col">
         {product && (
           <>
-            <div className="w-full mb-8">
-              <img className="w-44 mb-4 self-center" src={product.image} alt="" />
+            <div className="w-full mb-8 flex items-center flex-col">
+              <img className="w-full md:w-96 mb-4 self-center" src={product.image} alt="" />
+              <br />
+              <br />
               <div className="flex flex-col items-center">
                 <ProductPortionCard 
                   title="Nome"
-                  desc={product.name} 
+                  desc={String(product.name)} 
                 />
                 <ProductPortionCard 
                   title="Price"
-                  desc={product.price} 
+                  desc={String(product.price)} 
                 />
                 <ProductPortionCard 
                   title="Categoria"
                   desc={product.category?.name}
+                />
+                <ProductPortionCard 
+                  title="Descrição"
+                  desc={String(product.description)}
+                  style={{ opacity: 0.7 }}
                 />
               </div>
             </div>
@@ -70,7 +79,6 @@ export const OrientationsComponent = () => {
                 size="lg" 
                 onBtnClick={handleAddToCartClick}
               />
-              <Button text="Personalizar pedido" type="primary" size="lg" />
             </div>
           </>
         )}

@@ -47,8 +47,7 @@ export const Header = () => {
   };
 
   const handleEditProducts = () => {
-    // Adicione aqui a lógica para navegar para a página de edição de produtos
-    // Por exemplo: navigate("/admin/edit-products");
+    navigate("/products");
   };
 
   return (
@@ -74,7 +73,7 @@ export const Header = () => {
           </ul>
         </div>
         <div>
-          {!isUserLoggedIn() && (
+          {!isUserLoggedIn() ? (
             <>
               <Button
                 text="Entrar"
@@ -88,22 +87,33 @@ export const Header = () => {
                 onBtnClick={() => navigate("/register")}
               />
             </>
-          )}
-          {isUserLoggedIn() && !isAdmin && (
-            <button
-              onClick={handleLogout}
-              className="bg-red-500 text-white px-4 py-2 rounded"
-            >
-              Logout
-            </button>
-          )}
-          {isAdmin && (
-            <button
-              onClick={handleEditProducts}
-              className="bg-blue-500 text-white px-4 py-2 rounded ml-2"
-            >
-              Produtos
-            </button>
+          ) : (
+            <>
+              {!isAdmin && (
+                <button
+                  onClick={handleLogout}
+                  className="bg-red-500 text-white px-4 py-2 rounded"
+                >
+                  Logout
+                </button>
+              )}
+              {isAdmin && (
+                <>
+                  <button
+                    onClick={handleEditProducts}
+                    className="bg-blue-500 text-white px-4 py-2 rounded ml-2"
+                  >
+                    Produtos
+                  </button>
+                  <button
+                    onClick={handleLogout}
+                    className="bg-red-500 text-white px-4 py-2 rounded ml-2"
+                  >
+                    Logout
+                  </button>
+                </>
+              )}
+            </>
           )}
         </div>
         <div className="flex items-center">
@@ -126,8 +136,8 @@ export const Header = () => {
           snackName={cart.map((i) => i.name).join(", ")}
           deliveryTax="0.00"
           value={cart.map((i) => i.price).join(", ")}
-          subtotal={cart.reduce((pv, cur) => pv.price + cur.price, 0)}
-          total={cart.reduce((pv, cur) => pv.price + cur.price, 0)}
+          subtotal={cart.reduce((pv, cur) => pv + cur.price, 0)}
+          total={cart.reduce((pv, cur) => pv + cur.price, 0)}
         />
       )}
     </header>
