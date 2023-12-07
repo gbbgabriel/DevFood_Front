@@ -11,7 +11,10 @@ import { Lanches } from "./pages/Cardapio/lanche";
 import { Acompanhamentos } from "./pages/Cardapio/acompanhamentos";
 import { Bebida } from "./pages/Cardapio/bebida";
 import { Cardapio } from "./pages/Cardapio";
+import { OrderComponent } from "./pages/Order/order";
 import CreateProductForm from "./pages/CreateProduct/createProduct";
+import { Cart } from "./pages/Cart/cart";
+import OrderDetailsScreen from "./pages/Order/orderDetails";
 
 
 export const AppRoutes = () => {
@@ -30,6 +33,9 @@ export const AppRoutes = () => {
       <Route path="/lanches" Component={Lanches} />
       <Route path="/acompanhamentos" Component={Acompanhamentos} />
       <Route path="/bebida" Component={Bebida} />
+      <Route path="/cart" Component={Cart} />
+      <Route path="/order" Component={OrderComponent} />
+      <Route path="/order/:id" element={<OrderDetailsScreen />} />
       <Route path="/:slug/:id" Component={() => <h1>Page not found</h1>} />
       <Route path="*" Component={() => <h1>Page not found</h1>} />
     </Routes>

@@ -33,7 +33,8 @@ export const OrientationsComponent = () => {
 
   const handleAddToCartClick = async () => {
     try {
-      await addCart(id, 1);
+      const productId = parseInt(id, 10); // Converte para número
+      await addCart(productId, 1);
       toast.success("Produto adicionado no carrinho!");
     } catch (err) {
       toast.error("Erro ao adicionar produto no carrinho!");
@@ -57,7 +58,7 @@ export const OrientationsComponent = () => {
                   desc={String(product.name)} 
                 />
                 <ProductPortionCard 
-                  title="Price"
+                  title="Preço"
                   desc={String(product.price)} 
                 />
                 <ProductPortionCard 

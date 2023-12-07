@@ -15,7 +15,7 @@ const BUTTONS_DEF_FOODS = [
   { text: "Todos", value: "all", categoryId: null },
   { text: "Lanches", value: "sandwiches", categoryId: 1 },
   { text: "Bebidas", value: "beverages", categoryId: 3 },
-  { text: "Sobremesas", value: "desserts", categoryId: 2 },
+  { text: "Acompanhamentos", value: "desserts", categoryId: 2 },
 ];
 
 const AcompanhamentosComponent = () => {

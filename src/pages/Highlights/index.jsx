@@ -14,7 +14,7 @@ const BUTTONS_DEF_FOODS = [
   { text: "Todos", value: "all", categoryId: null },
   { text: "Lanches", value: "sandwiches", categoryId: 1 },
   { text: "Bebidas", value: "beverages", categoryId: 3 },
-  { text: "Sobremesas", value: "desserts", categoryId: 2 },
+  { text: "Acompanhamentos", value: "desserts", categoryId: 2 },
 ];
 
 const HighlightsComponent = () => {
@@ -47,9 +47,24 @@ const HighlightsComponent = () => {
 
   const handleAddToCartClick = async (id) => {
     try {
-      await addCart(id, 1);
-      toast.success('Produto adicionado ao carrinho!');
+      // Verifica se o ID do produto é válido
+      if (!id) {
+        console.error('ID do produto inválido.');
+        return;
+      }
+
+      const token = localStorage.getItem("@token");
+      
+      // Adiciona o produto ao carrinho
+      await addCart(id, 1, token);
+
+      if (token) {
+        toast.success('Produto adicionado ao carrinho!');
+      } else {
+        toast.error('Você precisa estar logado para adicionar produtos ao carrinho.');
+      }
     } catch (err) {
+      console.error('Erro ao adicionar produto ao carrinho:', err);
       toast.error('Erro ao adicionar produto ao carrinho!');
     }
   };

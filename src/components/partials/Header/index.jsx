@@ -5,11 +5,8 @@ import { jwtDecode } from "jwt-decode";
 import hamburguer from "../../../assets/images/icon_hamburguer.png";
 import cartImg from "../../../assets/images/icon_cart.png";
 import { Button } from "../../Button";
-import { CartModal } from "../../CartModal";
 
 export const Header = () => {
-  const [modalCartOpen, setModalCartOpen] = useState(false);
-  const [cart, setCart] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
 
@@ -39,15 +36,40 @@ export const Header = () => {
     navigate("/login");
   };
 
-  const handleOpenCartModal = async () => {
-    const response = await fetch("http://localhost:8080/cart");
-    const data = await response.json();
-    setCart(data);
-    setModalCartOpen(!modalCartOpen);
+  const handleOpenCartPage = async () => {
+    const token = localStorage.getItem("@token");
+
+    if (!token) {
+      console.error("Token não encontrado. Usuário não autenticado.");
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:8080/cart`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        console.error(`Erro na solicitação: ${response.status}`);
+        return;
+      }
+
+      navigate("/cart");
+    } catch (error) {
+      console.error('Erro ao abrir a página do carrinho:', error);
+    }
   };
 
   const handleEditProducts = () => {
     navigate("/products");
+  };
+
+  const handleViewOrders = () => {
+    navigate("/order");
   };
 
   return (
@@ -70,6 +92,7 @@ export const Header = () => {
             <li>
               <a href="#">Sobre nós</a>
             </li>
+
           </ul>
         </div>
         <div>
@@ -92,7 +115,7 @@ export const Header = () => {
               {!isAdmin && (
                 <button
                   onClick={handleLogout}
-                  className="bg-red-500 text-white px-4 py-2 rounded"
+                  className="bg-red-500 text-white px-4 py-2 rounded ml-2"
                 >
                   Logout
                 </button>
@@ -105,6 +128,14 @@ export const Header = () => {
                   >
                     Produtos
                   </button>
+                  
+                  <button
+                  className="bg-green-500 text-white px-4 py-2 rounded highlight ml-2"
+                  onClick={handleViewOrders}
+                >
+                  Pedidos
+                </button>
+
                   <button
                     onClick={handleLogout}
                     className="bg-red-500 text-white px-4 py-2 rounded ml-2"
@@ -120,26 +151,13 @@ export const Header = () => {
           <div className="mr-2">
             <div
               className="cursor-pointer"
-              onClick={handleOpenCartModal}
+              onClick={handleOpenCartPage}
             >
               <img src={cartImg} alt="Ícone do carrinho" />
             </div>
           </div>
-          <div>
-            <span className="block">R$ 0,00</span>
-            <span>0 itens</span>
-          </div>
         </div>
       </div>
-      {modalCartOpen && cart.length > 0 && (
-        <CartModal
-          snackName={cart.map((i) => i.name).join(", ")}
-          deliveryTax="0.00"
-          value={cart.map((i) => i.price).join(", ")}
-          subtotal={cart.reduce((pv, cur) => pv + cur.price, 0)}
-          total={cart.reduce((pv, cur) => pv + cur.price, 0)}
-        />
-      )}
     </header>
   );
 };
